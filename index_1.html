@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
+<title>Русский за год — Russisch in einem Jahr</title>
+
+<!-- PWA: manifest + theme -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1B2430">
+<meta name="background-color" content="#1B2430">
+
+<!-- Icons -->
+<link rel="icon" href="icons/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+
+<!-- iOS: enable standalone app mode on iPhone/iPad -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Русский">
+<meta name="mobile-web-app-capable" content="yes">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1B2430;
+    --ink-2:#242F3E;
+    --paper:#F5EFE3;
+    --paper-dim:#EAE2D0;
+    --amber:#D98E33;
+    --amber-light:#E9AE5F;
+    --birch:#7FA37A;
+    --rust:#B23A2E;
+    --text-light:#ECE6D9;
+    --text-dim:#A9AFB8;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--ink);
+    background-image:
+      radial-gradient(circle at 10% 0%, rgba(217,142,51,0.08), transparent 40%),
+      radial-gradient(circle at 90% 100%, rgba(127,163,122,0.08), transparent 45%);
+    color:var(--text-light);
+    font-family:'Manrope',sans-serif;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    padding-top:env(safe-area-inset-top);
+    padding-bottom:env(safe-area-inset-bottom);
+    -webkit-tap-highlight-color:transparent;
+  }
+  h1,h2,h3,.serif{font-family:'PT Serif',serif;}
+  .wrap{max-width:760px;margin:0 auto;padding:0 18px 90px;}
+
+  /* Header */
+  header.top{padding:28px 18px 18px;max-width:760px;margin:0 auto;position:relative;}
+  .eyebrow{
+    font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber-light);
+    font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:8px;
+  }
+  .eyebrow::before{content:"";width:18px;height:1px;background:var(--amber-light);display:inline-block;}
+  header.top h1{font-size:30px;margin:0 0 4px;font-weight:700;color:var(--text-light);}
+  header.top .sub{color:var(--text-dim);font-size:14.5px;line-height:1.5;max-width:52ch;}
+
+  /* Ribbon (signature element) */
+  .ribbon{
+    position:absolute;top:0;right:24px;
+    width:46px;padding:10px 0 16px;
+    background:linear-gradient(180deg,var(--rust),#8f2c22);
+    color:#fff;text-align:center;font-family:'PT Serif',serif;font-weight:700;
+    clip-path:polygon(0 0,100% 0,100% 100%,50% 82%,0 100%);
+    box-shadow:0 6px 14px rgba(0,0,0,.35);
+    font-size:12px;line-height:1.25;
+  }
+  .ribbon b{display:block;font-size:19px;}
+
+  /* Tabs */
+  nav.tabs{
+    display:flex;gap:6px;max-width:760px;margin:6px auto 22px;padding:0 18px;
+    position:sticky;top:0;z-index:20;padding-top:10px;padding-bottom:10px;
+    background:linear-gradient(180deg,var(--ink) 70%, rgba(27,36,48,0));
+  }
+  nav.tabs button{
+    flex:1;background:var(--ink-2);border:1px solid rgba(255,255,255,0.06);color:var(--text-dim);
+    padding:10px 6px;border-radius:10px;font-family:'Manrope',sans-serif;font-weight:700;font-size:12.5px;
+    cursor:pointer;transition:all .15s ease;letter-spacing:.01em;
+  }
+  nav.tabs button.active{background:var(--amber);color:#1B2430;border-color:var(--amber);}
+  nav.tabs button:hover:not(.active){color:var(--text-light);border-color:rgba(255,255,255,0.18);}
+
+  /* Cards */
+  .card{
+    background:var(--paper);color:#241C10;border-radius:16px;padding:20px 20px 22px;
+    box-shadow:0 10px 24px rgba(0,0,0,.28);margin-bottom:16px;
+  }
+  .card.dark{background:var(--ink-2);color:var(--text-light);box-shadow:none;border:1px solid rgba(255,255,255,0.07);}
+
+  /* Dashboard stat grid */
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0;}
+  .stat{background:var(--ink-2);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:14px 10px;text-align:center;}
+  .stat .num{font-family:'PT Serif',serif;font-size:26px;font-weight:700;color:var(--amber-light);}
+  .stat .lab{font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.06em;margin-top:2px;}
+
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    background:var(--amber);color:#221807;border:none;border-radius:10px;
+    padding:13px 18px;font-weight:800;font-size:14.5px;cursor:pointer;width:100%;
+    font-family:'Manrope',sans-serif;transition:transform .1s ease, background .15s ease;
+  }
+  .btn:hover{background:var(--amber-light);}
+  .btn:active{transform:scale(.98);}
+  .btn.secondary{background:transparent;color:var(--text-light);border:1.5px solid rgba(255,255,255,0.22);}
+  .btn.secondary:hover{border-color:var(--amber-light);color:var(--amber-light);}
+  .btn.small{width:auto;padding:8px 14px;font-size:13px;}
+  .btn.ghost{background:var(--paper-dim);color:#241C10;}
+
+  /* Vocab card */
+  .vocab{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    background:#fff;border:1px solid #E4D9BE;border-radius:12px;padding:14px 16px;margin-bottom:10px;
+  }
+  .vocab .ru{font-family:'PT Serif',serif;font-size:22px;font-weight:700;}
+  .vocab .phon{color:var(--rust);font-size:13.5px;font-weight:600;margin-top:2px;}
+  .vocab .de{color:#5b503c;font-size:13.5px;margin-top:3px;}
+  .speak-btn{
+    flex-shrink:0;width:42px;height:42px;border-radius:50%;background:var(--ink);color:var(--amber-light);
+    border:none;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  }
+  .speak-btn:active{transform:scale(.92);}
+  .speak-btn.big{width:58px;height:58px;font-size:22px;background:var(--rust);color:#fff;}
+
+  .phrase-box{
+    background:var(--paper-dim);border-left:4px solid var(--amber);border-radius:8px;
+    padding:14px 16px;margin-top:14px;
+  }
+  .phrase-box .lab{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#8a6a2f;font-weight:700;margin-bottom:6px;}
+
+  .legend{font-size:12.5px;color:var(--text-dim);line-height:1.6;}
+  .legend table{width:100%;border-collapse:collapse;font-size:12.5px;}
+  .legend td{padding:3px 6px;border-bottom:1px solid rgba(255,255,255,0.06);}
+  details summary{cursor:pointer;font-weight:700;color:var(--amber-light);font-size:13px;padding:4px 0;}
+
+  .progress-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:10px;}
+  .day-cell{
+    aspect-ratio:1;border-radius:8px;display:flex;align-items:center;justify-content:center;
+    font-size:11px;font-weight:700;background:var(--ink-2);color:var(--text-dim);border:1px solid rgba(255,255,255,0.06);
+  }
+  .day-cell.done{background:var(--birch);color:#12210f;border-color:var(--birch);}
+  .day-cell.today{background:var(--amber);color:#221807;border-color:var(--amber);box-shadow:0 0 0 2px var(--amber-light);}
+  .day-cell.locked{opacity:.35;}
+
+  .empty{
+    text-align:center;padding:40px 18px;color:var(--text-dim);
+  }
+  .empty .big-emoji{font-size:38px;margin-bottom:10px;}
+
+  .review-progress{display:flex;gap:4px;margin-bottom:16px;}
+  .review-progress span{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,0.12);}
+  .review-progress span.done{background:var(--amber);}
+
+  .flip-card{text-align:center;padding:30px 20px 26px;}
+  .flip-card .ru-big{font-family:'PT Serif',serif;font-size:38px;font-weight:700;color:var(--text-light);}
+  .flip-card .phon-big{color:var(--amber-light);font-size:16px;font-weight:600;margin-top:8px;}
+  .flip-card .de-big{color:var(--text-dim);font-size:15px;margin-top:14px;}
+  .rate-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:22px;}
+  .rate-row button{padding:14px 8px;border-radius:10px;border:none;font-weight:800;font-size:13.5px;cursor:pointer;}
+  .rate-row .again{background:rgba(178,58,46,0.18);color:#f2a89f;border:1.5px solid var(--rust);}
+  .rate-row .know{background:rgba(127,163,122,0.18);color:#bfe0ba;border:1.5px solid var(--birch);}
+
+  .nav-arrows{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+  .nav-arrows button{background:none;border:none;color:var(--text-dim);font-size:14px;font-weight:700;cursor:pointer;padding:6px 10px;}
+  .nav-arrows button:hover{color:var(--amber-light);}
+  .week-tag{font-size:12px;color:var(--amber-light);font-weight:700;text-transform:uppercase;letter-spacing:.05em;}
+
+  footer.note{text-align:center;color:var(--text-dim);font-size:12px;padding:20px 18px 10px;line-height:1.6;}
+  a.link{color:var(--amber-light);}
+
+  /* ===== Exercise engine ===== */
+  .lesson-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:4px;}
+  .hearts{display:flex;gap:2px;font-size:18px;letter-spacing:-1px;}
+  .heart.lost{opacity:.22;filter:grayscale(1);}
+  .xp-pill{background:var(--birch);color:#12210f;font-weight:800;font-size:12px;padding:6px 11px;border-radius:20px;white-space:nowrap;}
+  .exercise-progress{display:flex;gap:4px;margin:12px 0 18px;height:6px;}
+  .exercise-progress span{border-radius:3px;background:rgba(255,255,255,0.12);height:6px;transition:flex .2s ease;}
+
+  .prompt-lab{font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--amber-light);font-weight:700;margin-bottom:10px;}
+  .big-word{font-family:'PT Serif',serif;font-size:30px;font-weight:700;margin:4px 0;}
+  .big-word-sub{color:var(--rust);font-weight:600;font-size:14px;}
+  .center-speak{display:flex;justify-content:center;gap:14px;margin:16px 0 4px;}
+
+  .options-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px;}
+  .option{
+    background:#fff;border:2px solid #E4D9BE;border-radius:12px;padding:14px 12px;
+    font-weight:700;font-size:14.5px;cursor:pointer;text-align:left;color:#241C10;
+    display:flex;align-items:center;justify-content:space-between;gap:6px;font-family:'Manrope',sans-serif;
+  }
+  .option:hover{border-color:var(--amber);}
+  .option.correct{background:#DFF3DC;border-color:var(--birch);}
+  .option.incorrect{background:#F7DEDB;border-color:var(--rust);}
+  .option.disabled{pointer-events:none;}
+  .mini-speak{font-size:15px;flex-shrink:0;}
+
+  .word-bank{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;min-height:48px;padding:10px;background:var(--ink);border-radius:10px;}
+  .answer-strip{display:flex;flex-wrap:wrap;gap:8px;min-height:52px;padding:10px;border:2px dashed rgba(255,255,255,0.25);border-radius:10px;}
+  .chip{background:var(--paper);color:#241C10;padding:9px 14px;border-radius:8px;font-weight:700;font-family:'PT Serif',serif;font-size:15px;cursor:pointer;border:none;}
+
+  .feedback-bar{position:fixed;left:0;right:0;bottom:0;padding:16px 18px calc(16px + env(safe-area-inset-bottom));z-index:50;display:none;}
+  .feedback-bar.correct{background:#DFF3DC;border-top:3px solid var(--birch);}
+  .feedback-bar.incorrect{background:#F7DEDB;border-top:3px solid var(--rust);}
+  .feedback-bar .inner{max-width:760px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:16px;}
+  .feedback-bar .msg{color:#241C10;font-weight:800;font-size:15px;}
+  .feedback-bar .sub{color:#5b503c;font-size:12.5px;margin-top:2px;}
+
+  .intro-card{text-align:center;padding:30px 20px 26px;}
+  .mic-btn{width:58px;height:58px;border-radius:50%;background:var(--rust);color:#fff;border:none;font-size:23px;cursor:pointer;}
+  .mic-btn.listening{animation:pulse 1s infinite;}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(178,58,46,.5);}70%{box-shadow:0 0 0 14px rgba(178,58,46,0);}100%{box-shadow:0 0 0 0 rgba(178,58,46,0);}}
+
+  .lesson-start{text-align:center;padding:6px 4px 4px;}
+  .lesson-meta{display:flex;justify-content:center;gap:18px;margin:14px 0 18px;color:var(--text-dim);font-size:13px;}
+  .stats.four{grid-template-columns:repeat(4,1fr);}
+  .stats.four .num{font-size:21px;}
+
+  /* ===== Match pairs ===== */
+  .match-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;}
+  .match-col{display:flex;flex-direction:column;gap:8px;}
+  .match-card{
+    background:#fff;border:2px solid #E4D9BE;border-radius:10px;padding:12px 10px;
+    font-weight:700;font-size:14px;cursor:pointer;text-align:center;color:#241C10;font-family:'PT Serif',serif;
+    min-height:44px;display:flex;align-items:center;justify-content:center;
+  }
+  .match-card.de{font-family:'Manrope',sans-serif;font-size:12.5px;font-weight:600;}
+  .match-card.selected{border-color:var(--amber);background:#FBF0DD;}
+  .match-card.matched{background:#DFF3DC;border-color:var(--birch);opacity:.55;pointer-events:none;}
+  .match-card.wrong{background:#F7DEDB;border-color:var(--rust);}
+
+  /* ===== Tip card ===== */
+  .tip-card{padding:26px 22px;}
+  .tip-card .tip-icon{font-size:34px;margin-bottom:10px;}
+  .tip-card .tip-eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--rust);font-weight:800;margin-bottom:8px;}
+  .tip-card p{color:#241C10;font-size:15.5px;line-height:1.6;margin:0;}
+
+  /* ===== Fill blank / sentence context ===== */
+  .context-sentence{font-family:'PT Serif',serif;font-size:20px;line-height:1.6;text-align:center;}
+  .context-sentence .tap-word{cursor:pointer;border-bottom:2px dotted var(--rust);padding:0 1px;}
+  .context-sentence .blank-slot{
+    display:inline-block;min-width:64px;border-bottom:3px solid var(--amber);color:var(--amber);
+    font-weight:800;text-align:center;
+  }
+  .context-sentence .blank-slot.filled{color:#241C10;border-color:var(--birch);}
+
+  /* Phonetic-subtitle helpers (essential for someone who can't read Cyrillic) */
+  .match-card .phon-sub{display:block;font-family:'Manrope',sans-serif;font-weight:600;font-size:11px;color:var(--rust);margin-top:3px;}
+  .option .opt-phon{display:block;font-family:'Manrope',sans-serif;font-weight:600;font-size:11px;color:var(--rust);margin-top:2px;}
+  .chip-stack{display:flex;flex-direction:column;align-items:center;line-height:1.15;}
+  .chip-stack .chip-phon{font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;color:#8a6a2f;margin-top:2px;}
+  .word-token{display:inline-flex;flex-direction:column;align-items:center;margin:0 2px 8px;vertical-align:top;}
+  .word-token .phon-tiny{font-family:'Manrope',sans-serif;font-weight:600;font-size:11px;color:var(--rust);}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="eyebrow">Tag für Tag zum Russisch</div>
+  <h1>Русский за год</h1>
+  <div class="sub">Dein Jahreskurs für gesprochenes Russisch — hören, erkennen, sprechen und im Satz anwenden, Tag für Tag.</div>
+  <div class="ribbon" id="ribbon">Tag<b id="ribbonDay">1</b>/365</div>
+</header>
+
+<nav class="tabs">
+  <button data-tab="dashboard" class="active">Start</button>
+  <button data-tab="lesson">Lektion</button>
+  <button data-tab="review">Wiederholung</button>
+  <button data-tab="progress">Fortschritt</button>
+</nav>
+
+<div class="wrap">
+  <div id="tab-dashboard"></div>
+  <div id="tab-lesson" style="display:none;"></div>
+  <div id="tab-review" style="display:none;"></div>
+  <div id="tab-progress" style="display:none;"></div>
+</div>
+
+<footer class="note">
+  Aussprache über die Sprachausgabe deines Geräts (Russisch). Falls kein Ton kommt, prüfe, ob dein Browser eine russische Stimme installiert hat.<br>
+  Aktuell enthält der Kurs Monat 1 (Tag 1–28) in voller Tiefe — weitere Monate werden fortlaufend ergänzt.
+</footer>
+
+<script>
+/* ============== CURRICULUM DATA — Monat 1 (Tag 1–28) ============== */
+const CURRICULUM = [
+{day:1,week:1,month:1,theme:"Begrüßung & Vorstellung",items:[
+  {ru:"Привет",phon:"priVJET",de:"Hallo (informell)"},
+  {ru:"Здравствуйте",phon:"sdraSTVUJtje",de:"Guten Tag / Hallo (formell)"},
+  {ru:"Пока",phon:"paKA",de:"Tschüss"},
+  {ru:"Да",phon:"da",de:"Ja"},
+  {ru:"Нет",phon:"njet",de:"Nein"},
+  {ru:"Спасибо",phon:"spaSIba",de:"Danke"}],
+  phrase:{ru:"Привет! Как дела?",phon:"priVJET! kak djiLA?",de:"Hallo! Wie geht's?"}},
+{day:2,week:1,month:1,theme:"Höflichkeit",items:[
+  {ru:"Пожалуйста",phon:"paSHALsta",de:"Bitte / Gern geschehen"},
+  {ru:"Извините",phon:"izviNItje",de:"Entschuldigung"},
+  {ru:"Хорошо",phon:"charaSHO",de:"Gut"},
+  {ru:"Плохо",phon:"PLOcha",de:"Schlecht"},
+  {ru:"Доброе утро",phon:"DObraje Utra",de:"Guten Morgen"},
+  {ru:"Спокойной ночи",phon:"spaKOInoi NOtschi",de:"Gute Nacht"}],
+  phrase:{ru:"Как дела? Хорошо, спасибо!",phon:"kak djiLA? charaSHO, spaSIba!",de:"Wie geht's? Gut, danke!"}},
+{day:3,week:1,month:1,theme:"Sich vorstellen",items:[
+  {ru:"Меня зовут",phon:"mjiNJA zaVUT",de:"Ich heiße"},
+  {ru:"Как тебя зовут?",phon:"kak tjiBJA zaVUT?",de:"Wie heißt du?"},
+  {ru:"Я",phon:"ja",de:"Ich"},
+  {ru:"Ты",phon:"ty",de:"Du"},
+  {ru:"Он",phon:"on",de:"Er"},
+  {ru:"Она",phon:"aNA",de:"Sie / sie (weibl.)"}],
+  phrase:{ru:"Меня зовут Феликс.",phon:"mjiNJA zaVUT FElix.",de:"Ich heiße Felix."}},
+{day:4,week:1,month:1,theme:"Vorstellung (Fortsetzung)",items:[
+  {ru:"Очень приятно",phon:"Otschjen priJATna",de:"Freut mich sehr"},
+  {ru:"Мы",phon:"my",de:"Wir"},
+  {ru:"Вы",phon:"vy",de:"Sie / Ihr (höflich/Plural)"},
+  {ru:"Они",phon:"aNI",de:"Sie (Plural)"},
+  {ru:"Друг",phon:"druk",de:"Freund"},
+  {ru:"Подруга",phon:"padRUga",de:"Freundin"}],
+  phrase:{ru:"Очень приятно с вами познакомиться.",phon:"Otschjen priJATna s VAmi paznaKOmitsa.",de:"Es freut mich sehr, Sie kennenzulernen."}},
+{day:5,week:1,month:1,theme:"Herkunft & Sprache",items:[
+  {ru:"Откуда ты?",phon:"atKUda ty?",de:"Woher kommst du?"},
+  {ru:"Германия",phon:"girMAnija",de:"Deutschland"},
+  {ru:"Россия",phon:"raSSIja",de:"Russland"},
+  {ru:"Я из Европы",phon:"ja iz jiVROpy",de:"Ich komme aus Europa"},
+  {ru:"Язык",phon:"jiZYK",de:"Sprache"},
+  {ru:"Говорить",phon:"gavaRIT'",de:"sprechen"}],
+  phrase:{ru:"Я из Германии. Я говорю по-русски.",phon:"ja iz girMAniji. ja gavaRJU pa-RUsski.",de:"Ich komme aus Deutschland. Ich spreche Russisch."}},
+{day:6,week:1,month:1,theme:"Zahlen 1–5",items:[
+  {ru:"Один",phon:"aDIN",de:"eins"},
+  {ru:"Два",phon:"dva",de:"zwei"},
+  {ru:"Три",phon:"tri",de:"drei"},
+  {ru:"Четыре",phon:"tschiTYrje",de:"vier"},
+  {ru:"Пять",phon:"pjat'",de:"fünf"},
+  {ru:"Сколько?",phon:"SKOL'ka?",de:"Wie viel?"}],
+  phrase:{ru:"Сколько тебе лет?",phon:"SKOL'ka tjiBJE ljet?",de:"Wie alt bist du?"}},
+{day:7,week:1,month:1,theme:"Zahlen 6–10 & Alter",items:[
+  {ru:"Шесть",phon:"schest'",de:"sechs"},
+  {ru:"Семь",phon:"sjem'",de:"sieben"},
+  {ru:"Восемь",phon:"VOsjem'",de:"acht"},
+  {ru:"Девять",phon:"DJEvjat'",de:"neun"},
+  {ru:"Десять",phon:"DJEsjat'",de:"zehn"},
+  {ru:"Мне десять лет",phon:"mnje DJEsjat' ljet",de:"Ich bin zehn Jahre alt"}],
+  phrase:{ru:"Мне двадцать пять лет.",phon:"mnje DVAtzat' pjat' ljet.",de:"Ich bin 25 Jahre alt."}},
+{day:8,week:2,month:1,theme:"Familie I",items:[
+  {ru:"Семья",phon:"sjimJA",de:"Familie"},
+  {ru:"Мама",phon:"MAma",de:"Mama"},
+  {ru:"Папа",phon:"PApa",de:"Papa"},
+  {ru:"Сын",phon:"syn",de:"Sohn"},
+  {ru:"Дочь",phon:"dotsch'",de:"Tochter"},
+  {ru:"Ребёнок",phon:"rjiBJOnak",de:"Kind"}],
+  phrase:{ru:"Это моя семья.",phon:"Eta maJA sjimJA.",de:"Das ist meine Familie."}},
+{day:9,week:2,month:1,theme:"Familie II",items:[
+  {ru:"Брат",phon:"brat",de:"Bruder"},
+  {ru:"Сестра",phon:"sjistRA",de:"Schwester"},
+  {ru:"Бабушка",phon:"BAbuschka",de:"Oma"},
+  {ru:"Дедушка",phon:"DJEduschka",de:"Opa"},
+  {ru:"Муж",phon:"musch",de:"Ehemann"},
+  {ru:"Жена",phon:"zhiNA",de:"Ehefrau"}],
+  phrase:{ru:"У меня есть брат и сестра.",phon:"u mjiNJA jest' brat i sjistRA.",de:"Ich habe einen Bruder und eine Schwester."}},
+{day:10,week:2,month:1,theme:"„Ich habe…“ & Haustiere",items:[
+  {ru:"У меня есть",phon:"u mjiNJA jest'",de:"Ich habe"},
+  {ru:"У тебя есть",phon:"u tjiBJA jest'",de:"Du hast"},
+  {ru:"Партнёр",phon:"partNJOR",de:"Partner"},
+  {ru:"Девушка",phon:"DJEvuschka",de:"Freundin / junge Frau"},
+  {ru:"Собака",phon:"saBAka",de:"Hund"},
+  {ru:"Кошка",phon:"KOSCHka",de:"Katze"}],
+  phrase:{ru:"У меня есть собака и кошка.",phon:"u mjiNJA jest' saBAka i KOSCHka.",de:"Ich habe einen Hund und eine Katze."}},
+{day:11,week:2,month:1,theme:"Zahlen 11–15",items:[
+  {ru:"Одиннадцать",phon:"aDINatzat'",de:"elf"},
+  {ru:"Двенадцать",phon:"dviNAtzat'",de:"zwölf"},
+  {ru:"Тринадцать",phon:"triNAtzat'",de:"dreizehn"},
+  {ru:"Четырнадцать",phon:"tschiTYRnatzat'",de:"vierzehn"},
+  {ru:"Пятнадцать",phon:"pjatNAtzat'",de:"fünfzehn"},
+  {ru:"Возраст",phon:"VOzrast",de:"Alter"}],
+  phrase:{ru:"Моему брату пятнадцать лет.",phon:"majiMU BRAtu pjatNAtzat' ljet.",de:"Mein Bruder ist fünfzehn Jahre alt."}},
+{day:12,week:2,month:1,theme:"Zahlen 16–20",items:[
+  {ru:"Шестнадцать",phon:"schisNAtzat'",de:"sechzehn"},
+  {ru:"Семнадцать",phon:"sjimNAtzat'",de:"siebzehn"},
+  {ru:"Восемнадцать",phon:"vasjimNAtzat'",de:"achtzehn"},
+  {ru:"Девятнадцать",phon:"divjitNAtzat'",de:"neunzehn"},
+  {ru:"Двадцать",phon:"DVAtzat'",de:"zwanzig"},
+  {ru:"Год",phon:"got",de:"Jahr"}],
+  phrase:{ru:"Мне будет двадцать лет.",phon:"mnje BUdjet DVAtzat' ljet.",de:"Ich werde zwanzig Jahre alt."}},
+{day:13,week:2,month:1,theme:"Berufe I",items:[
+  {ru:"Работа",phon:"raBOta",de:"Arbeit"},
+  {ru:"Работать",phon:"raBOtat'",de:"arbeiten"},
+  {ru:"Студент",phon:"stuDJENT",de:"Student"},
+  {ru:"Учитель",phon:"uTSCHItjel'",de:"Lehrer"},
+  {ru:"Врач",phon:"vratsch",de:"Arzt"},
+  {ru:"Банк",phon:"bank",de:"Bank"}],
+  phrase:{ru:"Я работаю в банке.",phon:"ja raBOtaju v BANkje.",de:"Ich arbeite in einer Bank."}},
+{day:14,week:2,month:1,theme:"Berufe II & Wiederholung",items:[
+  {ru:"Инженер",phon:"inzhiNJER",de:"Ingenieur"},
+  {ru:"Продавец",phon:"pradaVJETS",de:"Verkäufer"},
+  {ru:"Компания",phon:"kamPAnija",de:"Firma / Unternehmen"},
+  {ru:"Коллега",phon:"kalLEga",de:"Kollege"},
+  {ru:"Профессия",phon:"praFJESsija",de:"Beruf"},
+  {ru:"Директор",phon:"diREKtar",de:"Direktor"}],
+  phrase:{ru:"Кем ты работаешь?",phon:"kjem ty raBOtajesch?",de:"Als was arbeitest du?"}},
+{day:15,week:3,month:1,theme:"Tagesablauf I",items:[
+  {ru:"Утро",phon:"Utra",de:"Morgen"},
+  {ru:"День",phon:"djen'",de:"Tag"},
+  {ru:"Вечер",phon:"VJEtscher",de:"Abend"},
+  {ru:"Ночь",phon:"notsch",de:"Nacht"},
+  {ru:"Сегодня",phon:"sjiVOdnja",de:"heute"},
+  {ru:"Завтра",phon:"ZAVtra",de:"morgen (Tag)"}],
+  phrase:{ru:"Сегодня хороший день.",phon:"sjiVOdnja chaROschi djen'.",de:"Heute ist ein guter Tag."}},
+{day:16,week:3,month:1,theme:"Tagesablauf II",items:[
+  {ru:"Вставать",phon:"vstaVAT'",de:"aufstehen"},
+  {ru:"Завтракать",phon:"ZAVtrakat'",de:"frühstücken"},
+  {ru:"Отдыхать",phon:"addyCHAT'",de:"sich ausruhen"},
+  {ru:"Спать",phon:"spat'",de:"schlafen"},
+  {ru:"Домой",phon:"daMOI",de:"nach Hause"},
+  {ru:"Час",phon:"tschas",de:"Stunde / Uhr"}],
+  phrase:{ru:"Я встаю в семь часов.",phon:"ja fstaJU v sjem tschiSOF.",de:"Ich stehe um sieben Uhr auf."}},
+{day:17,week:3,month:1,theme:"Uhrzeit",items:[
+  {ru:"Минута",phon:"miNUta",de:"Minute"},
+  {ru:"Который час?",phon:"kaTOryi tschas?",de:"Wie spät ist es?"},
+  {ru:"Сейчас",phon:"sjiTSCHAS",de:"jetzt"},
+  {ru:"Полдень",phon:"POLdjen'",de:"Mittag"},
+  {ru:"Полночь",phon:"POLnatsch",de:"Mitternacht"},
+  {ru:"Рано",phon:"RAna",de:"früh"}],
+  phrase:{ru:"Сейчас три часа.",phon:"sjiTSCHAS tri tschiSA.",de:"Es ist jetzt drei Uhr."}},
+{day:18,week:3,month:1,theme:"Wochentage I",items:[
+  {ru:"Понедельник",phon:"panjiDJEL'nik",de:"Montag"},
+  {ru:"Вторник",phon:"FTORnik",de:"Dienstag"},
+  {ru:"Среда",phon:"srjiDA",de:"Mittwoch"},
+  {ru:"Четверг",phon:"tschitVJERK",de:"Donnerstag"},
+  {ru:"Пятница",phon:"PJATnitsa",de:"Freitag"},
+  {ru:"Неделя",phon:"njiDJElja",de:"Woche"}],
+  phrase:{ru:"Сегодня среда.",phon:"sjiVOdnja srjiDA.",de:"Heute ist Mittwoch."}},
+{day:19,week:3,month:1,theme:"Wochenende & Häufigkeit",items:[
+  {ru:"Суббота",phon:"suBBOta",de:"Samstag"},
+  {ru:"Воскресенье",phon:"vaskrjiSJEn'je",de:"Sonntag"},
+  {ru:"Выходные",phon:"vychadNYje",de:"Wochenende"},
+  {ru:"Каждый день",phon:"KAZHdyi djen'",de:"jeden Tag"},
+  {ru:"Иногда",phon:"inagDA",de:"manchmal"},
+  {ru:"Никогда",phon:"nikagDA",de:"nie"}],
+  phrase:{ru:"По выходным я отдыхаю.",phon:"pa vychadNYM ja addyCHAju.",de:"Am Wochenende ruhe ich mich aus."}},
+{day:20,week:3,month:1,theme:"Wichtige Verben",items:[
+  {ru:"Идти",phon:"itTI",de:"gehen"},
+  {ru:"Ехать",phon:"JEchat'",de:"fahren"},
+  {ru:"Жить",phon:"zhit'",de:"leben / wohnen"},
+  {ru:"Любить",phon:"ljuBIT'",de:"lieben / mögen"},
+  {ru:"Хотеть",phon:"chaTJET'",de:"wollen"},
+  {ru:"Мочь",phon:"motsch'",de:"können"}],
+  phrase:{ru:"Я хочу пойти домой.",phon:"ja chaTSCHU paiTI daMOI.",de:"Ich möchte nach Hause gehen."}},
+{day:21,week:3,month:1,theme:"Orte & Wiederholung",items:[
+  {ru:"Дом",phon:"dom",de:"Haus"},
+  {ru:"Квартира",phon:"kvarTIra",de:"Wohnung"},
+  {ru:"Город",phon:"GOrat",de:"Stadt"},
+  {ru:"Улица",phon:"Ulitsa",de:"Straße"},
+  {ru:"Школа",phon:"SHKOla",de:"Schule"},
+  {ru:"Университет",phon:"univjirsiTJET",de:"Universität"}],
+  phrase:{ru:"Я живу в городе.",phon:"ja zhiVU v GOradje.",de:"Ich wohne in der Stadt."}},
+{day:22,week:4,month:1,theme:"Essen & Trinken I",items:[
+  {ru:"Еда",phon:"jiDA",de:"Essen"},
+  {ru:"Хлеб",phon:"chljep",de:"Brot"},
+  {ru:"Вода",phon:"vaDA",de:"Wasser"},
+  {ru:"Молоко",phon:"malaKO",de:"Milch"},
+  {ru:"Чай",phon:"tschai",de:"Tee"},
+  {ru:"Кофе",phon:"KOfje",de:"Kaffee"}],
+  phrase:{ru:"Я хочу чашку кофе.",phon:"ja chaTSCHU TSCHASHku KOfje.",de:"Ich möchte eine Tasse Kaffee."}},
+{day:23,week:4,month:1,theme:"Obst & Gemüse",items:[
+  {ru:"Фрукты",phon:"FRUKty",de:"Obst"},
+  {ru:"Овощи",phon:"Ovoschtschi",de:"Gemüse"},
+  {ru:"Яблоко",phon:"JAblaka",de:"Apfel"},
+  {ru:"Банан",phon:"baNAN",de:"Banane"},
+  {ru:"Картофель",phon:"karTOfjel'",de:"Kartoffel"},
+  {ru:"Помидор",phon:"pamiDOR",de:"Tomate"}],
+  phrase:{ru:"Я люблю яблоки и бананы.",phon:"ja ljubLJU JAblaki i baNAny.",de:"Ich mag Äpfel und Bananen."}},
+{day:24,week:4,month:1,theme:"Fleisch, Fisch & Gerichte",items:[
+  {ru:"Мясо",phon:"MJAsa",de:"Fleisch"},
+  {ru:"Рыба",phon:"RYba",de:"Fisch"},
+  {ru:"Курица",phon:"KUritsa",de:"Huhn"},
+  {ru:"Суп",phon:"sup",de:"Suppe"},
+  {ru:"Салат",phon:"saLAT",de:"Salat"},
+  {ru:"Вкусно",phon:"FKUSna",de:"lecker"}],
+  phrase:{ru:"Это очень вкусно!",phon:"Eta Otschjen' FKUSna!",de:"Das ist sehr lecker!"}},
+{day:25,week:4,month:1,theme:"Im Restaurant I",items:[
+  {ru:"Ресторан",phon:"rjistaRAN",de:"Restaurant"},
+  {ru:"Меню",phon:"mjiNJU",de:"Menü / Speisekarte"},
+  {ru:"Официант",phon:"affitsiANT",de:"Kellner"},
+  {ru:"Счёт",phon:"schtschot",de:"Rechnung"},
+  {ru:"Заказать",phon:"zakaZAT'",de:"bestellen"},
+  {ru:"Голодный",phon:"gaLODnyi",de:"hungrig"}],
+  phrase:{ru:"Я хочу заказать суп.",phon:"ja chaTSCHU zakaZAT' sup.",de:"Ich möchte eine Suppe bestellen."}},
+{day:26,week:4,month:1,theme:"Geschmack & Vorlieben",items:[
+  {ru:"Вкус",phon:"fkus",de:"Geschmack"},
+  {ru:"Сладкий",phon:"SLATkii",de:"süß"},
+  {ru:"Солёный",phon:"saLJOnyi",de:"salzig"},
+  {ru:"Острый",phon:"Ostryi",de:"scharf"},
+  {ru:"Нравиться",phon:"NRAvitsa",de:"gefallen"},
+  {ru:"Пробовать",phon:"PRObavat'",de:"probieren"}],
+  phrase:{ru:"Мне нравится русская кухня.",phon:"mnje NRAvitsa RUsskaja KUCHnja.",de:"Mir gefällt die russische Küche."}},
+{day:27,week:4,month:1,theme:"Einkaufen",items:[
+  {ru:"Магазин",phon:"magaZIN",de:"Geschäft / Laden"},
+  {ru:"Деньги",phon:"DJEN'gi",de:"Geld"},
+  {ru:"Цена",phon:"tsyNA",de:"Preis"},
+  {ru:"Дорого",phon:"DOraga",de:"teuer"},
+  {ru:"Дёшево",phon:"DJOscheva",de:"günstig"},
+  {ru:"Купить",phon:"kuPIT'",de:"kaufen"}],
+  phrase:{ru:"Сколько это стоит?",phon:"SKOL'ka Eta STOit?",de:"Wie viel kostet das?"}},
+{day:28,week:4,month:1,theme:"Verständigung & Monatsabschluss",items:[
+  {ru:"Понимать",phon:"paniMAT'",de:"verstehen"},
+  {ru:"Не понимаю",phon:"nje paniMAju",de:"Ich verstehe nicht"},
+  {ru:"Повторите, пожалуйста",phon:"paftaRItje, paSHALsta",de:"Wiederholen Sie bitte"},
+  {ru:"Медленно",phon:"MJEDljenna",de:"langsam"},
+  {ru:"Быстро",phon:"BYStra",de:"schnell"},
+  {ru:"Урок",phon:"uROK",de:"Lektion"}],
+  phrase:{ru:"Повторите, пожалуйста, медленнее.",phon:"paftaRItje, paSHALsta, MJEDljenneje.",de:"Wiederholen Sie bitte langsamer."}}
+];
+
+const DAY_BLANKS = {
+  1: "Привет!",
+  2: "спасибо!",
+  3: "Меня зовут",
+  4: "Очень приятно",
+  5: "Германии",
+  6: "Сколько",
+  7: "лет.",
+  8: "семья.",
+  9: "сестра.",
+  10: "кошка.",
+  11: "пятнадцать",
+  12: "двадцать",
+  13: "банке.",
+  14: "работаешь?",
+  15: "Сегодня",
+  16: "встаю",
+  17: "Сейчас",
+  18: "среда.",
+  19: "отдыхаю.",
+  20: "домой.",
+  21: "городе.",
+  22: "кофе.",
+  23: "бананы.",
+  24: "вкусно!",
+  25: "суп.",
+  26: "нравится",
+  27: "стоит?",
+  28: "медленнее."
+};
+
+const DAY_TIPS = {
+  1: "Verben wie „sein” fallen im russischen Präsens meist weg: „Я Феликс” (ja FElix) heißt schon „Ich bin Felix” – ganz ohne Verb.",
+  2: "„Пожалуйста” (paSHALsta) bedeutet sowohl „bitte” als auch „gern geschehen” – der Zusammenhang entscheidet, welche Übersetzung passt.",
+  3: "Nach „Меня зовут” (mjiNJA zaVUT, wörtlich „Mich nennt man”) folgt direkt der Name: „Меня зовут Феликс.” (mjiNJA zaVUT FElix.) Kein zusätzliches Verb nötig.",
+  4: "Verstärkende Wörter wie „очень” (Otschjen, sehr) stehen direkt VOR dem Wort, das sie verstärken – genau wie im Deutschen.",
+  5: "Nach „из” (iz, aus) steht das Substantiv im Genitiv: aus „Германия” (girMAnija) wird „из Германии” (iz girMAniji), nicht „из Германия” (iz girMAnija).",
+  6: "Fragen wie „Сколько тебе лет?” (SKOL'ka tjiBJE ljet?) brauchen kein Hilfsverb – das Fragewort „сколько” (SKOL'ka) reicht völlig aus.",
+  7: "„Мне … лет” (mnje … ljet, Ich bin … Jahre alt) nutzt „мне” (mnje, mir), nicht „я” (ja, ich) – wörtlich „Mir sind … Jahre.”",
+  8: "„Это” (Eta, das/dies) bleibt immer gleich, egal ob männlich, weiblich oder Plural folgt: „Это моя семья” (Eta maJA sjimJA), „Это мой брат” (Eta moi brat).",
+  9: "Besitz zeigst du mit „у + Person + есть” (u … jest'): „у меня есть” (u mjiNJA jest') heißt wörtlich „bei mir ist vorhanden.”",
+  10: "„Есть” (jest', es gibt) wird in der Alltagssprache oft weggelassen, wenn klar ist, DASS etwas existiert – nur WAS zählt dann.",
+  11: "Zahlen wie „пятнадцать” (pjatNAtzat', 15) bleiben vor „лет” (ljet, Jahre) unverändert – anders als im Deutschen gibt es keine Anpassung.",
+  12: "„Будет” (BUdjet) ist die Zukunftsform von „sein”: „Мне будет двадцать лет” (mnje BUdjet DVAtzat' ljet) = „Ich werde 20 (Jahre alt) sein.”",
+  13: "Verben auf „-ать” (-at') wie „работать” (raBOtat') enden in der Ich-Form auf „-аю” (-aju): „я работаю” (ja raBOtaju, ich arbeite) – ein typisches Muster.",
+  14: "„Кем” (kjem, wörtlich „als wer”) fragt nach dem Beruf: „Кем ты работаешь?” (kjem ty raBOtajesch?) = „Als was arbeitest du?”",
+  15: "Die Wortstellung ist im Russischen recht frei: „Сегодня хороший день” (sjiVOdnja chaROschi djen') und „Хороший день сегодня” (chaROschi djen' sjiVOdnja) sind beide korrekt.",
+  16: "Uhrzeiten bildest du mit „в” (v) + Zahl + „часов” (tschiSOF): „в семь часов” (v sjem tschiSOF) = „um sieben Uhr.”",
+  17: "„Который час?” (kaTOryi tschas?, wörtlich „Welche Stunde?”) ist die gebräuchlichste Art, nach der Uhrzeit zu fragen.",
+  18: "Wochentage schreibt man im Russischen klein: „понедельник” (panjiDJEL'nik), nicht „Понедельник” (panjiDJEL'nik) – außer am Satzanfang.",
+  19: "„По выходным” (pa vychadNYM, am Wochenende) nutzt „по” (pa) + Dativ Plural, typisch für wiederkehrende Zeitangaben.",
+  20: "„Хочу” (chaTSCHU, ich will) + Infinitiv bildet einfache Wunsch-Sätze: „Я хочу пойти домой” (ja chaTSCHU paiTI daMOI) = „Ich will nach Hause gehen.”",
+  21: "Nach „в” (v, in) bei einem Ort steht der Präpositiv: „в городе” (v GOradje, in der Stadt) – „город” (GOrat) wird zu „городе” (GOradje).",
+  22: "Nach „хотеть” (chaTJET', wollen) steht das gewünschte Ding im Akkusativ: „чашку кофе” (TSCHASHku KOfje, eine Tasse Kaffee).",
+  23: "Bei allgemeinen Vorlieben steht das Genannte oft im Plural: „Я люблю яблоки” (ja ljubLJU JAblaki, Ich mag Äpfel) – nicht nur einen Apfel.",
+  24: "Kurzform-Wörter wie „вкусно” (FKUSna, lecker) brauchen kein Verb „sein”: „Это очень вкусно!” (Eta Otschjen' FKUSna!) = „Das ist sehr lecker!”",
+  25: "„Хочу заказать” (chaTSCHU zakaZAT', ich möchte bestellen) kombiniert „хотеть” (chaTJET') + Infinitiv – das Muster kennst du schon von Tag 20.",
+  26: "„Нравиться” (NRAvitsa, gefallen) dreht die Logik um: „Мне нравится кухня” (mnje NRAvitsa KUCHnja) heißt wörtlich „Mir gefällt die Küche” – die Person steht im Dativ.",
+  27: "„Стоить” (STOit', kosten) kombiniert sich direkt mit „сколько” (SKOL'ka): „Сколько это стоит?” (SKOL'ka Eta STOit?) – kein extra Hilfsverb nötig.",
+  28: "Höfliche Bitten enden oft auf „-ите” (-itje): „Повторите” (paftaRItje, wiederholen Sie) und „Извините” (izviNItje, entschuldigen Sie) folgen demselben Muster."
+};
+
+</script>
+<script>
+/* ============== STORAGE ==============
+   Standalone PWA: uses the browser's built-in localStorage (persists on-device,
+   fully offline, no account/server needed). Data stays only on this device/browser. */
+const LS_PROGRESS_KEY = 'ru_jahr_progress';
+const LS_SRS_KEY = 'ru_jahr_srs';
+
+async function loadProgress(){
+  try{
+    const raw = localStorage.getItem(LS_PROGRESS_KEY);
+    return raw ? JSON.parse(raw) : {completedDays:[], activityDates:[], totalXP:0};
+  }catch(e){ console.error(e); return {completedDays:[], activityDates:[], totalXP:0}; }
+}
+async function saveProgress(p){
+  try{ localStorage.setItem(LS_PROGRESS_KEY, JSON.stringify(p)); }catch(e){ console.error(e); }
+}
+async function loadSRS(){
+  try{
+    const raw = localStorage.getItem(LS_SRS_KEY);
+    return raw ? JSON.parse(raw) : {};
+  }catch(e){ console.error(e); return {}; }
+}
+async function saveSRS(s){
+  try{ localStorage.setItem(LS_SRS_KEY, JSON.stringify(s)); }catch(e){ console.error(e); }
+}
+
+function todayStr(){
+  const d = new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function daysBetween(a,b){
+  return Math.round((new Date(b) - new Date(a)) / 86400000);
+}
+function markActivity(progress){
+  const t = todayStr();
+  if(!progress.activityDates.includes(t)) progress.activityDates.push(t);
+}
+function computeStreak(progress){
+  const dates = new Set(progress.activityDates);
+  let streak = 0;
+  let cursor = new Date();
+  while(true){
+    const s = cursor.getFullYear()+'-'+String(cursor.getMonth()+1).padStart(2,'0')+'-'+String(cursor.getDate()).padStart(2,'0');
+    if(dates.has(s)){ streak++; cursor.setDate(cursor.getDate()-1); }
+    else break;
+  }
+  return streak;
+}
+
+/* ============== SPEECH ============== */
+let ruVoice = null;
+function pickVoice(){
+  const voices = speechSynthesis.getVoices();
+  ruVoice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('ru')) || null;
+  updateVoiceStatus();
+}
+if('speechSynthesis' in window){
+  pickVoice();
+  speechSynthesis.onvoiceschanged = pickVoice;
+}
+function speak(text){
+  if(!('speechSynthesis' in window)) return;
+  try{
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'ru-RU';
+    if(ruVoice) u.voice = ruVoice;
+    u.rate = 0.85;
+    speechSynthesis.speak(u);
+  }catch(e){ console.error('speak failed', e); }
+}
+// Safely embed a JS string literal inside a double-quoted HTML attribute (onclick="...").
+// Handles values containing apostrophes (e.g. "geht's") or quotes without breaking the markup.
+function jsAttr(value){
+  return JSON.stringify(value)
+    .replace(/&/g,'&amp;')
+    .replace(/"/g,'&quot;')
+    .replace(/</g,'&lt;');
+}
+function updateVoiceStatus(){
+  const el = document.getElementById('voiceStatus');
+  if(!el) return;
+  if(!('speechSynthesis' in window)){
+    el.innerHTML = '⚠️ Dieser Browser unterstützt keine Sprachausgabe. Öffne die App in Chrome oder Safari.';
+  } else if(ruVoice){
+    el.innerHTML = `✅ Russische Stimme gefunden: <b>${ruVoice.name}</b>`;
+  } else {
+    el.innerHTML = '⚠️ Noch keine russische Stimme gefunden. Tippe unten auf „Testton” — falls nichts kommt, versuche Chrome (Desktop/Android) oder installiere in den Systemeinstellungen ein russisches Sprachpaket.';
+  }
+}
+function supportsSTT(){
+  return !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+}
+function normalize(str){
+  return (str||'').toLowerCase().replace(/[.,!?…«»„""'']/g,'').replace(/\s+/g,' ').trim();
+}
+function startSpeakCheck(expected){
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const resultEl = document.getElementById('speakResult');
+  const micBtn = document.getElementById('micBtn');
+  if(!SR || !resultEl) return;
+  try{
+    const rec = new SR();
+    rec.lang = 'ru-RU';
+    rec.interimResults = false;
+    rec.maxAlternatives = 1;
+    if(micBtn) micBtn.classList.add('listening');
+    resultEl.textContent = '🎧 Ich höre zu …';
+    rec.onresult = (e)=>{
+      const heard = e.results[0][0].transcript;
+      const ok = normalize(heard).includes(normalize(expected)) || normalize(expected).includes(normalize(heard));
+      resultEl.innerHTML = ok
+        ? `Gehört: „${heard}" — klingt gut! 🎉`
+        : `Gehört: „${heard}" — kein Problem, die Aussprache kommt mit der Übung.`;
+    };
+    rec.onerror = ()=>{ resultEl.textContent = 'Nichts erkannt — sprich einfach laut nach, das zählt auch.'; };
+    rec.onend = ()=>{ if(micBtn) micBtn.classList.remove('listening'); };
+    rec.start();
+  }catch(err){
+    resultEl.textContent = 'Spracherkennung nicht verfügbar — sprich einfach laut nach.';
+  }
+}
+
+/* ============== LEITNER SRS ============== */
+const BOX_INTERVALS = [1,2,4,8,16,30]; // days
+function ensureSRSWord(srs, id){
+  if(!srs[id]) srs[id] = {box:0, due: todayStr()};
+  return srs[id];
+}
+function reviewWord(srs, id, correct){
+  const w = ensureSRSWord(srs, id);
+  if(correct) w.box = Math.min(w.box+1, BOX_INTERVALS.length-1);
+  else w.box = 0;
+  const d = new Date();
+  d.setDate(d.getDate() + BOX_INTERVALS[w.box]);
+  w.due = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function dueWords(srs, progress){
+  const t = todayStr();
+  const out = [];
+  for(const day of CURRICULUM){
+    if(!progress.completedDays.includes(day.day)) continue;
+    day.items.forEach((it, idx) => {
+      const id = 'd'+day.day+'-'+idx;
+      const w = srs[id];
+      if(w && w.due <= t){
+        out.push({id, ru: it.ru, phon: it.phon, de: it.de});
+      }
+    });
+  }
+  return out;
+}
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+function poolUpTo(day){
+  const out = [];
+  CURRICULUM.forEach(d=>{ if(d.day<=day) d.items.forEach(it=>out.push(it)); });
+  return out;
+}
+function pickDistractors(pool, correctItem, key, n){
+  const seen = new Set([correctItem[key]]);
+  const out = [];
+  for(const it of shuffle(pool)){
+    if(out.length>=n) break;
+    if(seen.has(it[key])) continue;
+    seen.add(it[key]);
+    out.push(it);
+  }
+  return out;
+}
+
+/* ============== APP STATE ============== */
+let PROGRESS = {completedDays:[], activityDates:[], totalXP:0};
+let SRS = {};
+let currentLessonDay = 1;
+let reviewQueue = [];
+let reviewIndex = 0;
+let lessonCtx = null;
+let currentEx = null;
+
+async function init(){
+  PROGRESS = await loadProgress();
+  if(PROGRESS.totalXP===undefined) PROGRESS.totalXP = 0;
+  SRS = await loadSRS();
+  currentLessonDay = nextDay();
+  renderRibbon();
+  renderDashboard();
+  renderLessonFlow();
+  renderProgress();
+  setupTabs();
+}
+
+function nextDay(){
+  for(const day of CURRICULUM){
+    if(!PROGRESS.completedDays.includes(day.day)) return day.day;
+  }
+  return CURRICULUM.length ? CURRICULUM[CURRICULUM.length-1].day : 1;
+}
+
+function renderRibbon(){
+  document.getElementById('ribbonDay').textContent = nextDay();
+}
+
+function setupTabs(){
+  document.querySelectorAll('nav.tabs button').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.wrap > div').forEach(d=>d.style.display='none');
+      document.getElementById('tab-'+btn.dataset.tab).style.display='block';
+      if(btn.dataset.tab==='review') startReview();
+      if(btn.dataset.tab==='dashboard') renderDashboard();
+      if(btn.dataset.tab==='progress') renderProgress();
+      if(btn.dataset.tab==='lesson') renderLessonFlow();
+    });
+  });
+}
+
+/* ============== DASHBOARD ============== */
+function renderDashboard(){
+  const el = document.getElementById('tab-dashboard');
+  const streak = computeStreak(PROGRESS);
+  const due = dueWords(SRS, PROGRESS).length;
+  const nd = nextDay();
+  const dayObj = CURRICULUM.find(d=>d.day===nd);
+  const allDone = PROGRESS.completedDays.length >= CURRICULUM.length;
+
+  el.innerHTML = `
+    <div class="stats four">
+      <div class="stat"><div class="num">${PROGRESS.totalXP||0}</div><div class="lab">XP gesamt</div></div>
+      <div class="stat"><div class="num">${streak}</div><div class="lab">Streak</div></div>
+      <div class="stat"><div class="num">${PROGRESS.completedDays.length*6}</div><div class="lab">Wörter</div></div>
+      <div class="stat"><div class="num">${due}</div><div class="lab">Fällig</div></div>
+    </div>
+
+    <div class="card">
+      ${allDone ? `
+        <div class="week-tag">Monat 1 abgeschlossen 🎉</div>
+        <h2 style="margin:8px 0 6px;">Stark gemacht!</h2>
+        <p style="color:#5b503c;font-size:14px;line-height:1.6;">Du hast alle 28 Tage von Monat 1 durchgespielt. Halte deine Vokabeln mit der Wiederholung frisch — weitere Monate kannst du mir jederzeit ergänzen lassen.</p>
+        <button class="btn" onclick="document.querySelector('[data-tab=review]').click()">Zur Wiederholung</button>
+      ` : `
+        <div class="week-tag">${dayObj ? dayObj.theme : ''}</div>
+        <h2 style="margin:8px 0 6px;">Tag ${nd} von 28</h2>
+        <p style="color:#5b503c;font-size:14px;line-height:1.6;">${dayObj ? dayObj.items.length : 0} neue Wörter, als Spiel verpackt: erkennen, hören, sprechen, im Satz einsetzen. Etwa 8 Minuten.</p>
+        <button class="btn" onclick="document.querySelector('[data-tab=lesson]').click()">Heutige Lektion starten 🚀</button>
+      `}
+    </div>
+
+    ${due > 0 ? `
+    <div class="card dark">
+      <strong style="color:var(--amber-light);">${due} Vokabel${due===1?'':'n'} zur Wiederholung fällig</strong>
+      <p style="color:var(--text-dim);font-size:13.5px;margin:6px 0 12px;">Kurze Wiederholung hält das Gelernte im Langzeitgedächtnis.</p>
+      <button class="btn secondary" onclick="document.querySelector('[data-tab=review]').click()">Jetzt wiederholen</button>
+    </div>` : ''}
+
+    <div class="card dark">
+      <strong style="color:var(--amber-light);">Audio-Check</strong>
+      <p id="voiceStatus" style="color:var(--text-dim);font-size:13px;margin:6px 0 12px;">Prüfe Sprachausgabe …</p>
+      <button class="btn secondary" onclick='speak("Привет, это тест.")'>🔊 Testton abspielen</button>
+    </div>
+
+    <div class="card dark">
+      <details>
+        <summary>Lautschrift-Legende anzeigen</summary>
+        <div class="legend" style="margin-top:10px;">
+          Die Lautschrift ist an die deutsche Aussprache angelehnt — keine offizielle Umschrift, sondern eine Sprechhilfe. GROSSBUCHSTABEN markieren die <b>betonte</b> Silbe.
+          <table>
+            <tr><td>ж</td><td>weiches „sh” (wie franz. „Journal”)</td></tr>
+            <tr><td>ц</td><td>„z” wie in „Zeit”</td></tr>
+            <tr><td>ч</td><td>„tsch”</td></tr>
+            <tr><td>ш</td><td>„sch”</td></tr>
+            <tr><td>щ</td><td>„schtsch”</td></tr>
+            <tr><td>х</td><td>„ch” wie in „Bach”</td></tr>
+            <tr><td>ы</td><td>dumpfes „y” (zwischen i und ü)</td></tr>
+            <tr><td>ь</td><td>macht den vorherigen Konsonant „weich” (′)</td></tr>
+            <tr><td>й</td><td>kurzes „i”</td></tr>
+          </table>
+        </div>
+      </details>
+    </div>
+  `;
+  updateVoiceStatus();
+}
+
+/* ============== LESSON: controller ============== */
+function renderLessonFlow(){
+  if(!lessonCtx){ renderLessonHome(); return; }
+  if(lessonCtx.phase==='match'){ renderMatchPairs(); return; }
+  if(lessonCtx.phase==='tip'){ renderTip(); return; }
+  if(lessonCtx.phase==='exercise'){ renderExerciseStep(); return; }
+  if(lessonCtx.phase==='summary'){ renderSummary(); return; }
+}
+
+function renderLessonHome(){
+  const el = document.getElementById('tab-lesson');
+  const dayObj = CURRICULUM.find(d=>d.day===currentLessonDay);
+  if(!dayObj){
+    el.innerHTML = `<div class="empty"><div class="big-emoji">📖</div>Für diesen Tag ist noch kein Inhalt hinterlegt.<br>Sag mir Bescheid, dann ergänze ich den nächsten Monat.</div>`;
+    return;
+  }
+  const isDone = PROGRESS.completedDays.includes(dayObj.day);
+  const idx = CURRICULUM.findIndex(d=>d.day===dayObj.day);
+  const prevDay = idx>0 ? CURRICULUM[idx-1].day : null;
+  const nextD = idx<CURRICULUM.length-1 ? CURRICULUM[idx+1].day : null;
+  const exCount = 3+3+3+1+1+1+3;
+  el.innerHTML = `
+    <div class="nav-arrows">
+      <button ${prevDay?'':'disabled style="opacity:.3"'} onclick="currentLessonDay=${prevDay};renderLessonFlow();">← Tag ${prevDay||''}</button>
+      <span class="week-tag">Woche ${dayObj.week} · Monat ${dayObj.month}</span>
+      <button ${nextD?'':'disabled style="opacity:.3"'} onclick="currentLessonDay=${nextD};renderLessonFlow();">Tag ${nextD||''} →</button>
+    </div>
+    <div class="card lesson-start">
+      <div class="week-tag">${dayObj.theme}</div>
+      <h2 style="margin:8px 0 6px;">Tag ${dayObj.day}${isDone?' ✓':''}</h2>
+      <p style="color:#5b503c;font-size:14px;line-height:1.6;">${dayObj.items.length} neue Wörter — erst per Zuordnungs-Spiel entdecken, dann in Sätzen hören, lesen, bauen &amp; sprechen. Die Bedeutung wird nie einfach verraten, du findest sie selbst heraus.</p>
+      <div class="lesson-meta">
+        <span>🎯 ${exCount} Übungen</span>
+        <span>⏱️ ~7 Min</span>
+        <span>❤️ 5</span>
+      </div>
+      <button class="btn" onclick="startLesson(${dayObj.day})">${isDone? 'Nochmal üben 🔁' : 'Lektion starten 🚀'}</button>
+    </div>
+    ${isDone ? `<p style="text-align:center;color:var(--text-dim);font-size:12.5px;margin-top:10px;">Bereits abgeschlossen — die Wörter laufen in deiner Wiederholung mit. Nochmal üben schadet nicht und bringt zusätzliche XP.</p>` : ''}
+  `;
+}
+
+function buildFillBlankExercise(dayObj){
+  const blank = DAY_BLANKS[dayObj.day];
+  const ruWords = dayObj.phrase.ru.split(' ');
+  const phonWords = dayObj.phrase.phon.split(' ');
+  const blankWords = blank.split(' ');
+  let startIdx = -1;
+  for(let i=0; i<=ruWords.length-blankWords.length; i++){
+    const sliceJoined = ruWords.slice(i, i+blankWords.length).join(' ');
+    if(sliceJoined === blank || sliceJoined.startsWith(blank)){ startIdx = i; break; }
+  }
+  let sentence, sentencePhon, blankPhon;
+  if(startIdx === -1){
+    // Fallback (shouldn't trigger — all 28 days verified to align)
+    sentence = dayObj.phrase.ru.replace(blank, '____');
+    sentencePhon = dayObj.phrase.phon;
+    blankPhon = '';
+  } else {
+    const ruOut = ruWords.slice();
+    const phonOut = phonWords.slice();
+    blankPhon = phonWords.slice(startIdx, startIdx+blankWords.length).join(' ');
+    ruOut.splice(startIdx, blankWords.length, '____');
+    phonOut.splice(startIdx, blankWords.length, '____');
+    sentence = ruOut.join(' ');
+    sentencePhon = phonOut.join(' ');
+  }
+  return {type:'fill_blank', phrase:dayObj.phrase, blank, blankPhon, sentence, sentencePhon};
+}
+function buildTranslateMcExercise(dayObj){
+  return {type:'sentence_translate_mc', phrase:dayObj.phrase};
+}
+
+function buildExerciseQueue(dayObj){
+  const items = dayObj.items;
+  let ex = [];
+  shuffle(items).slice(0,3).forEach(it=>{ ex.push({type:'mc_meaning', item:it}); });
+  shuffle(items).slice(0,3).forEach(it=>{ ex.push({type:'mc_produce', item:it}); });
+  shuffle(items).slice(0,3).forEach(it=>{ ex.push({type:'listen', item:it}); });
+  ex.push(buildFillBlankExercise(dayObj));
+  ex.push(buildTranslateMcExercise(dayObj));
+  ex.push({type:'sentence_build', phrase:dayObj.phrase});
+  shuffle(items).slice(0,2).forEach(it=>{ ex.push({type:'speak', item:it}); });
+  ex.push({type:'speak', phrase:dayObj.phrase, isPhrase:true});
+  return shuffle(ex);
+}
+
+function startLesson(day){
+  const dayObj = CURRICULUM.find(d=>d.day===day);
+  if(!dayObj) return;
+  lessonCtx = {
+    dayObj, phase:'match',
+    mp: null, mpDone:false,
+    queue: buildExerciseQueue(dayObj), idx:0, hearts:5, xp:0, firstTryCorrect:0,
+    answeredBaseOnce:new Set(), wrongKeys:new Set(), locked:false
+  };
+  lessonCtx.gradedTotal = lessonCtx.queue.filter(e=>e.type!=='speak').length;
+  renderLessonFlow();
+}
+function exitLesson(){ lessonCtx = null; renderLessonFlow(); }
+
+function tappableSentence(ruSentence, phonSentence){
+  const ruWords = ruSentence.split(' ');
+  const phonWords = (phonSentence || '').split(' ');
+  return ruWords.map((tok, i)=>{
+    if(tok.includes('____')){
+      return `<span class="word-token"><span class="blank-slot">${tok}</span></span>`;
+    }
+    const clean = tok.replace(/^[«„"]+|[»""',.!?]+$/g,'');
+    const phonTok = phonWords[i] || '';
+    if(!clean) return `<span class="word-token">${tok}</span>`;
+    return `<span class="word-token"><span class="tap-word" onclick="speak(${jsAttr(clean)})">${tok}</span><span class="phon-tiny">${phonTok}</span></span>`;
+  }).join(' ');
+}
+
+/* ---- Phase 1: Match pairs (first exposure — no meanings shown directly) ---- */
+function renderMatchPairs(){
+  const dayObj = lessonCtx.dayObj;
+  if(!lessonCtx.mp){
+    const left = shuffle(dayObj.items.map((it,i)=>({id:'ru'+i, pair:i, text:it.ru, phon:it.phon})));
+    const right = shuffle(dayObj.items.map((it,i)=>({id:'de'+i, pair:i, text:it.de})));
+    lessonCtx.mp = { left, right, matched:new Set(), selLeft:null, selRight:null, mistakes:0 };
+  }
+  const el = document.getElementById('tab-lesson');
+  el.innerHTML = `
+    <div class="lesson-header">
+      <button class="btn secondary small" onclick="exitLesson()">✕</button>
+      <span class="week-tag">Wortpaare finden</span>
+      <span style="width:70px;"></span>
+    </div>
+    <div class="card">
+      <div class="prompt-lab">Tippe zuerst ein russisches Wort an, um es zu hören (Lautschrift steht direkt darunter) — dann ordne es der passenden Übersetzung zu</div>
+      <div class="match-grid" id="matchGrid"></div>
+    </div>
+  `;
+  renderMatchGrid();
+}
+function renderMatchGrid(){
+  const grid = document.getElementById('matchGrid');
+  if(!grid) return;
+  const mp = lessonCtx.mp;
+  const leftHtml = mp.left.map(c=>{
+    let cls = 'match-card';
+    if(mp.matched.has(c.pair)) cls += ' matched';
+    else if(mp.selLeft===c.id) cls += ' selected';
+    return `<div class="${cls}" onclick="matchPick('left','${c.id}')">${c.text}<span class="phon-sub">${c.phon}</span></div>`;
+  }).join('');
+  const rightHtml = mp.right.map(c=>{
+    let cls = 'match-card de';
+    if(mp.matched.has(c.pair)) cls += ' matched';
+    else if(mp.selRight===c.id) cls += ' selected';
+    return `<div class="${cls}" onclick="matchPick('right','${c.id}')">${c.text}</div>`;
+  }).join('');
+  grid.innerHTML = `<div class="match-col">${leftHtml}</div><div class="match-col">${rightHtml}</div>`;
+}
+function matchPick(side, id){
+  const mp = lessonCtx.mp;
+  const card = (side==='left'?mp.left:mp.right).find(c=>c.id===id);
+  if(mp.matched.has(card.pair)) return;
+  if(side==='left'){
+    mp.selLeft = id;
+    speak(card.text);
+  } else {
+    mp.selRight = id;
+  }
+  renderMatchGrid();
+  if(mp.selLeft && mp.selRight){
+    const l = mp.left.find(c=>c.id===mp.selLeft);
+    const r = mp.right.find(c=>c.id===mp.selRight);
+    if(l.pair === r.pair){
+      mp.matched.add(l.pair);
+      mp.selLeft = null; mp.selRight = null;
+      renderMatchGrid();
+      if(mp.matched.size === mp.left.length){
+        lessonCtx.mpDone = true;
+        lessonCtx.xp += 15;
+        setTimeout(()=>{
+          if(lessonCtx.phase==='match'){ lessonCtx.phase='tip'; renderLessonFlow(); }
+        }, 400);
+      }
+    } else {
+      mp.mistakes++;
+      const lEl = document.querySelector(`.match-card[onclick="matchPick('left','${mp.selLeft}')"]`);
+      const rEl = document.querySelector(`.match-card[onclick="matchPick('right','${mp.selRight}')"]`);
+      if(lEl) lEl.classList.add('wrong');
+      if(rEl) rEl.classList.add('wrong');
+      setTimeout(()=>{
+        mp.selLeft = null; mp.selRight = null;
+        renderMatchGrid();
+      }, 550);
+    }
+  }
+}
+
+/* ---- Phase 2: Grammar tip ---- */
+function renderTip(){
+  const dayObj = lessonCtx.dayObj;
+  const el = document.getElementById('tab-lesson');
+  el.innerHTML = `
+    <div class="lesson-header">
+      <button class="btn secondary small" onclick="exitLesson()">✕</button>
+      <span class="week-tag">Kurzer Tipp</span>
+      <span style="width:70px;"></span>
+    </div>
+    <div class="card tip-card">
+      <div class="tip-icon">💡</div>
+      <div class="tip-eyebrow">Satzbau-Tipp</div>
+      <p>${DAY_TIPS[dayObj.day] || ''}</p>
+    </div>
+    <button class="btn" style="margin-top:16px;" onclick="startExercisePhase()">Los geht's 🚀</button>
+  `;
+}
+function startExercisePhase(){
+  lessonCtx.phase = 'exercise';
+  lessonCtx.idx = 0;
+  renderLessonFlow();
+}
+
+/* ---- Exercise phase ---- */
+
+function heartsHTML(){
+  let h='';
+  for(let i=0;i<5;i++) h += `<span class="heart ${i<lessonCtx.hearts?'':'lost'}">❤️</span>`;
+  return h;
+}
+function exerciseHeader(){
+  const pct = lessonCtx.gradedTotal>0 ? Math.round((lessonCtx.answeredBaseOnce.size/lessonCtx.gradedTotal)*100) : 0;
+  return `
+    <div class="lesson-header">
+      <button class="btn secondary small" onclick="exitLesson()">✕</button>
+      <div class="hearts">${heartsHTML()}</div>
+      <div class="xp-pill">${lessonCtx.xp} XP</div>
+    </div>
+    <div class="exercise-progress"><span style="flex:${pct};background:var(--amber);"></span><span style="flex:${100-pct};"></span></div>
+  `;
+}
+function baseKey(ex){
+  if(ex.type==='sentence_build') return 'sentence_build';
+  if(ex.type==='fill_blank') return 'fill_blank';
+  if(ex.type==='sentence_translate_mc') return 'sentence_translate_mc';
+  return ex.type+'|'+ex.item.ru;
+}
+function gradeAnswer(ex, correct){
+  const key = baseKey(ex);
+  if(!lessonCtx.answeredBaseOnce.has(key)){
+    lessonCtx.answeredBaseOnce.add(key);
+    if(correct) lessonCtx.firstTryCorrect++;
+  }
+  if(correct){
+    lessonCtx.xp += lessonCtx.wrongKeys.has(key) ? 6 : 10;
+  } else {
+    lessonCtx.hearts = Math.max(0, lessonCtx.hearts-1);
+    lessonCtx.wrongKeys.add(key);
+    lessonCtx.attemptCounts = lessonCtx.attemptCounts || {};
+    lessonCtx.attemptCounts[key] = (lessonCtx.attemptCounts[key]||1) + 1;
+    // requeue for another try, but cap retries so a lesson always finishes
+    if(lessonCtx.attemptCounts[key] <= 3){
+      const insertPos = Math.min(lessonCtx.queue.length, lessonCtx.idx+3);
+      lessonCtx.queue.splice(insertPos, 0, Object.assign({}, ex));
+    }
+  }
+}
+function showFeedback(correct, correctText, audioText){
+  const bar = document.getElementById('feedbackBar');
+  if(!bar) return;
+  bar.className = 'feedback-bar ' + (correct?'correct':'incorrect');
+  bar.style.display = 'block';
+  bar.innerHTML = `
+    <div class="inner">
+      <div style="display:flex;align-items:center;gap:10px;">
+        ${audioText ? `<button class="speak-btn" style="width:40px;height:40px;flex-shrink:0;" onclick="speak(${jsAttr(audioText)})">🔊</button>` : ''}
+        <div>
+          <div class="msg">${correct? 'Richtig! 🎉' : 'Nicht ganz.'}</div>
+          ${correct? '' : `<div class="sub">Richtig wäre: ${correctText}</div>`}
+        </div>
+      </div>
+      <button class="btn" style="width:auto;padding:12px 22px;background:${correct?'var(--birch)':'var(--rust)'};color:#fff;" onclick="nextExercise()">Weiter</button>
+    </div>
+  `;
+}
+function nextExercise(){
+  const bar = document.getElementById('feedbackBar');
+  if(bar) bar.style.display='none';
+  lessonCtx.idx++;
+  renderExerciseStep();
+}
+function handleOptionSelect(el, correct, correctText, audioText){
+  if(lessonCtx.locked) return;
+  lessonCtx.locked = true;
+  document.querySelectorAll('.option').forEach(o=>{
+    o.classList.add('disabled');
+    if(o.dataset.correct==='1') o.classList.add('correct');
+  });
+  if(!correct) el.classList.add('incorrect');
+  gradeAnswer(currentEx, correct);
+  showFeedback(correct, correctText, audioText || correctText);
+}
+
+function renderExerciseStep(){
+  if(lessonCtx.idx >= lessonCtx.queue.length){ lessonCtx.phase='summary'; renderLessonFlow(); return; }
+  lessonCtx.locked = false;
+  currentEx = lessonCtx.queue[lessonCtx.idx];
+  const el = document.getElementById('tab-lesson');
+  let body = '';
+  if(currentEx.type==='mc_meaning') body = bodyMcMeaning(currentEx);
+  else if(currentEx.type==='mc_produce') body = bodyMcProduce(currentEx);
+  else if(currentEx.type==='listen') body = bodyListen(currentEx);
+  else if(currentEx.type==='fill_blank') body = bodyFillBlank(currentEx);
+  else if(currentEx.type==='sentence_translate_mc') body = bodySentenceTranslateMc(currentEx);
+  else if(currentEx.type==='sentence_build') body = bodySentenceBuild(currentEx);
+  else if(currentEx.type==='speak') body = bodySpeak(currentEx);
+  el.innerHTML = exerciseHeader() + body + `<div class="feedback-bar" id="feedbackBar"></div>`;
+  if(currentEx.type==='sentence_build') initSentenceBuild(currentEx);
+  if(currentEx.type==='listen'){ try{ speak(currentEx.item.ru); }catch(e){} }
+}
+
+function bodyMcMeaning(ex){
+  const pool = poolUpTo(lessonCtx.dayObj.day);
+  const distractors = pickDistractors(pool, ex.item, 'de', 3);
+  const options = shuffle([{de:ex.item.de,correct:true}, ...distractors.map(d=>({de:d.de,correct:false}))]);
+  return `
+    <div class="prompt-lab">Was bedeutet das?</div>
+    <div class="card" style="text-align:center;">
+      <div class="big-word">${ex.item.ru}</div>
+      <div class="big-word-sub">${ex.item.phon}</div>
+      <div class="center-speak"><button class="speak-btn big" onclick="speak(${jsAttr(ex.item.ru)})">🔊</button></div>
+    </div>
+    <div class="options-grid">
+      ${options.map(o=>`<button class="option" data-correct="${o.correct?1:0}" onclick="handleOptionSelect(this,${o.correct},${jsAttr(ex.item.de)},${jsAttr(ex.item.ru)})">${o.de}</button>`).join('')}
+    </div>
+  `;
+}
+function bodyMcProduce(ex){
+  const pool = poolUpTo(lessonCtx.dayObj.day);
+  const distractors = pickDistractors(pool, ex.item, 'ru', 3);
+  const options = shuffle([{ru:ex.item.ru,phon:ex.item.phon,correct:true}, ...distractors.map(d=>({ru:d.ru,phon:d.phon,correct:false}))]);
+  const correctDisplay = ex.item.ru + ' (' + ex.item.phon + ')';
+  return `
+    <div class="prompt-lab">Wie sagt man das auf Russisch?</div>
+    <div class="card" style="text-align:center;">
+      <div style="font-family:'PT Serif',serif;font-size:22px;font-weight:700;">${ex.item.de}</div>
+    </div>
+    <div class="options-grid">
+      ${options.map(o=>`
+        <button class="option" data-correct="${o.correct?1:0}" onclick="handleOptionSelect(this,${o.correct},${jsAttr(correctDisplay)},${jsAttr(ex.item.ru)})">
+          <span style="flex:1;text-align:left;">${o.ru}<span class="opt-phon">${o.phon}</span></span>
+          <span class="mini-speak" onclick="event.stopPropagation();speak(${jsAttr(o.ru)})">🔊</span>
+        </button>`).join('')}
+    </div>
+  `;
+}
+function bodyListen(ex){
+  const pool = poolUpTo(lessonCtx.dayObj.day);
+  const distractors = pickDistractors(pool, ex.item, 'ru', 3);
+  const options = shuffle([{ru:ex.item.ru,phon:ex.item.phon,correct:true}, ...distractors.map(d=>({ru:d.ru,phon:d.phon,correct:false}))]);
+  const correctDisplay = ex.item.ru + ' (' + ex.item.phon + ')';
+  return `
+    <div class="prompt-lab">Was hörst du?</div>
+    <div class="card" style="text-align:center;">
+      <div class="center-speak" style="margin:8px 0 4px;"><button class="speak-btn big" onclick="speak(${jsAttr(ex.item.ru)})">🔊</button></div>
+      <div style="color:var(--text-dim);font-size:12.5px;">Tippe zum Wiederholen</div>
+    </div>
+    <div class="options-grid">
+      ${options.map(o=>`<button class="option" data-correct="${o.correct?1:0}" onclick="handleOptionSelect(this,${o.correct},${jsAttr(correctDisplay)},${jsAttr(ex.item.ru)})">${o.ru}<span class="opt-phon">${o.phon}</span></button>`).join('')}
+    </div>
+  `;
+}
+function bodyFillBlank(ex){
+  const pool = poolUpTo(lessonCtx.dayObj.day).filter(it=>it.ru !== ex.blank);
+  const distractors = shuffle(pool).slice(0,3);
+  const options = shuffle([{text:ex.blank,phon:ex.blankPhon,correct:true}, ...distractors.map(d=>({text:d.ru,phon:d.phon,correct:false}))]);
+  const correctDisplay = ex.blank + ' (' + ex.blankPhon + ')';
+  return `
+    <div class="prompt-lab">Welches Wort passt in die Lücke?</div>
+    <div class="card">
+      <div style="color:#5b503c;font-size:13px;margin-bottom:12px;">${ex.phrase.de}</div>
+      <div class="context-sentence">${tappableSentence(ex.sentence, ex.sentencePhon)}</div>
+    </div>
+    <div class="options-grid">
+      ${options.map(o=>`<button class="option" data-correct="${o.correct?1:0}" onclick="handleOptionSelect(this,${o.correct},${jsAttr(correctDisplay)},${jsAttr(ex.phrase.ru)})">${o.text}<span class="opt-phon">${o.phon}</span></button>`).join('')}
+    </div>
+  `;
+}
+function bodySentenceTranslateMc(ex){
+  const otherPhrases = CURRICULUM.filter(d=>d.day!==lessonCtx.dayObj.day).map(d=>d.phrase);
+  const distractors = shuffle(otherPhrases).slice(0,3);
+  const options = shuffle([{de:ex.phrase.de,correct:true}, ...distractors.map(d=>({de:d.de,correct:false}))]);
+  return `
+    <div class="prompt-lab">Was bedeutet dieser Satz?</div>
+    <div class="card" style="text-align:center;">
+      <div class="context-sentence">${tappableSentence(ex.phrase.ru, ex.phrase.phon)}</div>
+      <div class="center-speak"><button class="speak-btn big" onclick="speak(${jsAttr(ex.phrase.ru)})">🔊</button></div>
+      <div style="color:var(--text-dim);font-size:12px;margin-top:6px;">Tippe ein Wort an, um es zu hören</div>
+    </div>
+    <div class="options-grid">
+      ${options.map(o=>`<button class="option" data-correct="${o.correct?1:0}" onclick="handleOptionSelect(this,${o.correct},${jsAttr(ex.phrase.de)},${jsAttr(ex.phrase.ru)})">${o.de}</button>`).join('')}
+    </div>
+  `;
+}
+function bodySentenceBuild(ex){
+  return `
+    <div class="prompt-lab">Baue den Satz</div>
+    <div class="card">
+      <div style="color:#5b503c;font-size:14px;margin-bottom:14px;">${ex.phrase.de}</div>
+      <div class="answer-strip" id="answerStrip"></div>
+      <div class="word-bank" id="wordBank"></div>
+      <button class="btn" style="margin-top:16px;" onclick="checkSentence()">Prüfen</button>
+    </div>
+  `;
+}
+function initSentenceBuild(ex){
+  const ruWords = ex.phrase.ru.split(' ');
+  const phonWords = ex.phrase.phon.split(' ');
+  lessonCtx.sb = { words: shuffle(ruWords.map((w,i)=>({id:i+'_'+w, text:w, phon:phonWords[i]||''}))), answer: [] };
+  renderSBChips();
+}
+function renderSBChips(){
+  const bankEl = document.getElementById('wordBank');
+  const stripEl = document.getElementById('answerStrip');
+  if(!bankEl || !stripEl) return;
+  const used = new Set(lessonCtx.sb.answer);
+  bankEl.innerHTML = lessonCtx.sb.words.filter(w=>!used.has(w.id)).map(w=>`<button class="chip" onclick="sbPick('${w.id}')"><span class="chip-stack">${w.text}<span class="chip-phon">${w.phon}</span></span></button>`).join('');
+  stripEl.innerHTML = lessonCtx.sb.answer.map(id=>{
+    const w = lessonCtx.sb.words.find(x=>x.id===id);
+    return `<button class="chip" onclick="sbRemove('${id}')"><span class="chip-stack">${w.text}<span class="chip-phon">${w.phon}</span></span></button>`;
+  }).join('');
+}
+function sbPick(id){ if(lessonCtx.locked) return; lessonCtx.sb.answer.push(id); renderSBChips(); }
+function sbRemove(id){ if(lessonCtx.locked) return; lessonCtx.sb.answer = lessonCtx.sb.answer.filter(x=>x!==id); renderSBChips(); }
+function checkSentence(){
+  if(lessonCtx.locked) return;
+  const built = lessonCtx.sb.answer.map(id=>lessonCtx.sb.words.find(w=>w.id===id).text).join(' ');
+  const correct = normalize(built) === normalize(currentEx.phrase.ru);
+  lessonCtx.locked = true;
+  const strip = document.getElementById('answerStrip');
+  if(strip) strip.style.borderColor = correct ? 'var(--birch)' : 'var(--rust)';
+  gradeAnswer(currentEx, correct);
+  showFeedback(correct, currentEx.phrase.ru + ' (' + currentEx.phrase.phon + ')', currentEx.phrase.ru);
+}
+
+function bodySpeak(ex){
+  const text = ex.isPhrase ? ex.phrase.ru : ex.item.ru;
+  const phon = ex.isPhrase ? ex.phrase.phon : ex.item.phon;
+  const de = ex.isPhrase ? ex.phrase.de : ex.item.de;
+  const sttOk = supportsSTT();
+  return `
+    <div class="prompt-lab">Sprechen</div>
+    <div class="card" style="text-align:center;">
+      <div class="big-word">${text}</div>
+      <div class="big-word-sub">${phon}</div>
+      <div style="color:#5b503c;font-size:13.5px;margin-top:8px;">${de}</div>
+      <div class="center-speak">
+        <button class="speak-btn big" onclick="speak(${jsAttr(text)})">🔊</button>
+        ${sttOk ? `<button class="mic-btn" id="micBtn" onclick="startSpeakCheck(${jsAttr(text)})">🎤</button>` : ''}
+      </div>
+      <div id="speakResult" style="min-height:20px;margin-top:12px;color:var(--amber-light);font-size:13px;">${sttOk ? 'Erst anhören, dann 🎤 antippen und laut nachsprechen.' : 'Hör dir das Wort an und sprich es laut nach.'}</div>
+      <button class="btn secondary" style="margin-top:16px;" onclick="finishSpeak()">Weiter</button>
+    </div>
+  `;
+}
+function finishSpeak(){
+  lessonCtx.xp += 5;
+  nextExercise();
+}
+
+/* ---- Summary ---- */
+function renderSummary(){
+  const el = document.getElementById('tab-lesson');
+  const day = lessonCtx.dayObj.day;
+  const accuracyPct = lessonCtx.gradedTotal>0 ? Math.round((lessonCtx.firstTryCorrect/lessonCtx.gradedTotal)*100) : 100;
+  el.innerHTML = `
+    <div class="card" style="text-align:center;">
+      <div style="font-size:44px;">🏆</div>
+      <h2 style="margin:10px 0 4px;">Lektion geschafft!</h2>
+      <div class="stats" style="margin-top:18px;">
+        <div class="stat"><div class="num">+${lessonCtx.xp}</div><div class="lab">XP</div></div>
+        <div class="stat"><div class="num">${accuracyPct}%</div><div class="lab">Treffsicher</div></div>
+        <div class="stat"><div class="num">${lessonCtx.hearts}/5</div><div class="lab">Herzen</div></div>
+      </div>
+      <button class="btn" style="margin-top:22px;" onclick="finishLesson(${day})">Tag ${day} abschließen</button>
+    </div>
+  `;
+}
+async function finishLesson(day){
+  await completeLesson(day, lessonCtx ? lessonCtx.xp : 0);
+  lessonCtx = null;
+  renderLessonFlow();
+}
+
+async function completeLesson(day, xpGain){
+  if(!PROGRESS.completedDays.includes(day)) PROGRESS.completedDays.push(day);
+  PROGRESS.totalXP = (PROGRESS.totalXP||0) + (xpGain||0);
+  markActivity(PROGRESS);
+  const dayObj = CURRICULUM.find(d=>d.day===day);
+  dayObj.items.forEach((it, idx)=>{
+    const id = 'd'+day+'-'+idx;
+    if(!SRS[id]) SRS[id] = {box:0, due: todayStr()};
+  });
+  await saveProgress(PROGRESS);
+  await saveSRS(SRS);
+  renderRibbon();
+  renderDashboard();
+  renderProgress();
+}
+
+/* ============== REVIEW ============== */
+function startReview(){
+  reviewQueue = shuffle(dueWords(SRS, PROGRESS)).slice(0, 20);
+  reviewIndex = 0;
+  renderReview();
+}
+function renderReview(){
+  const el = document.getElementById('tab-review');
+  if(reviewQueue.length === 0){
+    el.innerHTML = `<div class="empty"><div class="big-emoji">🌤️</div>Aktuell ist nichts zur Wiederholung fällig.<br>Schließe eine neue Lektion ab, oder komm morgen wieder.</div>`;
+    return;
+  }
+  if(reviewIndex >= reviewQueue.length){
+    el.innerHTML = `<div class="empty"><div class="big-emoji">✅</div><strong style="color:var(--text-light);">Wiederholung geschafft!</strong><br>${reviewQueue.length} Vokabeln durchgegangen.<br><br><button class="btn secondary" style="width:auto;padding:10px 18px;" onclick="startReview()">Nochmal</button></div>`;
+    return;
+  }
+  const bars = reviewQueue.map((_,i)=>`<span class="${i<reviewIndex?'done':''}"></span>`).join('');
+  const w = reviewQueue[reviewIndex];
+  el.innerHTML = `
+    <div class="review-progress">${bars}</div>
+    <div class="card flip-card">
+      <div class="ru-big">${w.ru}</div>
+      <div class="phon-big">${w.phon}</div>
+      <button class="speak-btn big" style="margin-top:16px;" onclick="speak(${jsAttr(w.ru)})">🔊</button>
+      <div id="deReveal" style="margin-top:16px;">
+        <button class="btn ghost" style="width:auto;padding:9px 16px;" onclick="revealMeaning()">Bedeutung zeigen</button>
+      </div>
+    </div>
+  `;
+}
+function revealMeaning(){
+  const w = reviewQueue[reviewIndex];
+  document.getElementById('deReveal').innerHTML = `
+    <div class="de-big">${w.de}</div>
+    <div class="rate-row">
+      <button class="again" onclick="rateWord(false)">Nochmal üben</button>
+      <button class="know" onclick="rateWord(true)">Wusste ich</button>
+    </div>
+  `;
+}
+async function rateWord(correct){
+  const w = reviewQueue[reviewIndex];
+  reviewWord(SRS, w.id, correct);
+  PROGRESS.totalXP = (PROGRESS.totalXP||0) + (correct ? 3 : 1);
+  markActivity(PROGRESS);
+  await saveSRS(SRS);
+  await saveProgress(PROGRESS);
+  reviewIndex++;
+  renderReview();
+  renderDashboard();
+}
+
+/* ============== PROGRESS ============== */
+function renderProgress(){
+  const el = document.getElementById('tab-progress');
+  const nd = nextDay();
+  let cells = '';
+  const totalShown = Math.max(CURRICULUM.length, 28);
+  for(let i=1;i<=totalShown;i++){
+    const done = PROGRESS.completedDays.includes(i);
+    const isToday = i===nd && !done;
+    const hasContent = CURRICULUM.some(d=>d.day===i);
+    let cls = 'day-cell';
+    if(done) cls += ' done';
+    else if(isToday) cls += ' today';
+    else if(!hasContent) cls += ' locked';
+    cells += `<div class="${cls}">${i}</div>`;
+  }
+  const streak = computeStreak(PROGRESS);
+  const longestNote = PROGRESS.activityDates.length;
+  el.innerHTML = `
+    <div class="card">
+      <div class="week-tag">Monat 1</div>
+      <h2 style="margin:8px 0 4px;">${PROGRESS.completedDays.length} / 28 Tage geschafft</h2>
+      <div class="progress-grid">${cells}</div>
+    </div>
+    <div class="card dark">
+      <strong style="color:var(--amber-light);">Wie geht's weiter?</strong>
+      <p style="color:var(--text-dim);font-size:13.5px;line-height:1.6;margin-top:6px;">
+        Monat 1 (Tag 1–28) deckt Grundlagen ab: Begrüßung, Familie, Zahlen, Alltag, Uhrzeit, Essen &amp; Trinken.
+        Sag mir einfach „mach weiter mit Monat 2”, dann ergänze ich den nächsten Monat direkt in dieser App —
+        dein Fortschritt und deine Wiederholungen bleiben dabei erhalten.
+      </p>
+    </div>
+    <div class="card dark">
+      <strong style="color:var(--amber-light);">Aktivität</strong>
+      <p style="color:var(--text-dim);font-size:13.5px;line-height:1.6;margin-top:6px;">
+        Aktueller Streak: <b style="color:var(--text-light);">${streak} Tag${streak===1?'':'e'}</b><br>
+        Aktive Lerntage insgesamt: <b style="color:var(--text-light);">${longestNote}</b>
+      </p>
+    </div>
+  `;
+}
+
+init();
+</script>
+<script>
+  // Register service worker for offline support / installability
+  if('serviceWorker' in navigator){
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').catch(err => console.error('SW registration failed:', err));
+    });
+  }
+</script>
+</body>
+</html>
